@@ -2,7 +2,7 @@ module github.com/helios-live/go-netplus/v2
 
 go 1.17
 
-require go.ideatocode.tech/log v1.0.4
+require github.com/helios-live/go-log/v2 v2.0.0
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
