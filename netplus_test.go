@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/likexian/gokit/assert"
-	"go.ideatocode.tech/netplus"
+	"github.com/helios-live/go-netplus/v2"
 )
 
 func TestCappingReads(t *testing.T) {

@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/likexian/gokit/assert"
-	"go.ideatocode.tech/log"
-	"go.ideatocode.tech/netplus"
+	"github.com/helios-live/go-log/v2"
+	"github.com/helios-live/go-netplus/v2"
 )
 
 func TestPipeReadTimeoutReached(t *testing.T) {

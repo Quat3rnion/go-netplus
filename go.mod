@@ -1,16 +1,17 @@
 module github.com/helios-live/go-netplus/v2
 
-go 1.17
+go 1.23.0
 
-require github.com/helios-live/go-log/v2 v2.0.0
+toolchain go1.23.5
 
 require (
-	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/fatih/color v1.13.0 // indirect
-	github.com/likexian/gokit v0.25.13 // indirect
-	github.com/mattn/go-colorable v0.1.9 // indirect
-	github.com/mattn/go-isatty v0.0.14 // indirect
-	github.com/rs/zerolog v1.26.1 // indirect
-	go.ideatocode.tech/debug v1.0.8 // indirect
-	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e // indirect
+	github.com/helios-live/go-log/v2 v2.0.1
+	github.com/likexian/gokit v0.25.13
+)
+
+require (
+	github.com/mattn/go-colorable v0.1.14 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/rs/zerolog v1.34.0 // indirect
+	golang.org/x/sys v0.34.0 // indirect
 )

@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"go.ideatocode.tech/log"
+	"github.com/helios-live/go-log/v2"
 )
 
 // Piper .

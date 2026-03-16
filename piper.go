@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"go.ideatocode.tech/log"
+	"github.com/helios-live/go-log/v2"
 )
 
 // ErrShortWrite means that a write accepted fewer bytes than requested
