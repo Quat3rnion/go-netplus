@@ -1,4 +1,4 @@
-module go.ideatocode.tech/netplus
+module github.com/helios-live/go-netplus/v2
 
 go 1.17
 
