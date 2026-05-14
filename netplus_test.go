@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/likexian/gokit/assert"
 	"github.com/helios-live/go-netplus/v2"
+	"github.com/likexian/gokit/assert"
 )
 
 func TestCappingReads(t *testing.T) {
@@ -22,7 +22,8 @@ func TestCappingReads(t *testing.T) {
 		for running {
 			c, err := ln.Accept()
 
-			cc := netplus.CounterConn{Conn: c, Cap: 15000}
+			cc := netplus.CounterConn{Conn: c}
+			cc.Cap.Store(15000)
 			if err != nil {
 				panic(err)
 			}
@@ -85,7 +86,8 @@ func TestCappingWrites(t *testing.T) {
 		if err != nil {
 			panic(err)
 		}
-		cc := netplus.CounterConn{Conn: c, Cap: 15000}
+		cc := netplus.CounterConn{Conn: c}
+		cc.Cap.Store(15000)
 		buf := []byte("omg it works!")
 		n := 0
 		for running && err == nil {
@@ -115,7 +117,8 @@ func TestClosingReads(t *testing.T) {
 		for running {
 			c, err := ln.Accept()
 
-			cc := netplus.CounterConn{Conn: c, Cap: 15000}
+			cc := netplus.CounterConn{Conn: c}
+			cc.Cap.Store(15000)
 			if err != nil {
 				panic(err)
 			}

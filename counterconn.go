@@ -10,12 +10,16 @@ import (
 
 const MaxMinutes = 10
 
-// CounterConn counts all bytes that go through it
+// CounterConn counts all bytes that go through it.
+//
+// Upstream/Downstream/Cap are atomic.Int64 so that observers (e.g. metrics or
+// accountant goroutines) can safely read them concurrently with the Read/Write
+// goroutines that mutate them.
 type CounterConn struct {
 	net.Conn
-	Upstream   int64
-	Downstream int64
-	Cap        int64
+	Upstream   atomic.Int64
+	Downstream atomic.Int64
+	Cap        atomic.Int64
 }
 
 // CounterListener is the Listener that uses CounterConn instead of net.Conn
@@ -53,7 +57,7 @@ func (cl CounterListener) Accept() (net.Conn, error) {
 	}
 	cl.mux.Unlock()
 
-	return &CounterConn{conn, 0, 0, 0}, err
+	return &CounterConn{Conn: conn}, err
 }
 
 func (cl *CounterListener) GetRPM() [MaxMinutes]int64 {
@@ -65,18 +69,18 @@ func (cl *CounterListener) GetRPM() [MaxMinutes]int64 {
 func (cc *CounterConn) Read(b []byte) (int, error) {
 	n, err := cc.Conn.Read(b)
 	n6 := int64(n)
-	cc.Upstream += n6
+	cc.Upstream.Add(n6)
 
 	// what is the null value?
 	// one option is to use zero as a null value
 
-	cap := atomic.LoadInt64(&cc.Cap)
+	cap := cc.Cap.Load()
 
 	if cap == 0 {
 		return n, err
 	}
 
-	atomic.AddInt64(&cc.Cap, -n6)
+	cc.Cap.Add(-n6)
 
 	nv := cap - n6
 
@@ -88,21 +92,21 @@ func (cc *CounterConn) Read(b []byte) (int, error) {
 		return n, io.EOF
 	}
 	// we use the zero value as a way to tell that there is no cap set
-	atomic.AddInt64(&cc.Cap, -1)
+	cc.Cap.Add(-1)
 	return n, err
 }
 
 func (cc *CounterConn) Write(b []byte) (int, error) {
 	n, err := cc.Conn.Write(b)
 	n6 := int64(n)
-	cc.Downstream += n6
+	cc.Downstream.Add(n6)
 
-	cap := atomic.LoadInt64(&cc.Cap)
+	cap := cc.Cap.Load()
 
 	if cap == 0 {
 		return n, err
 	}
-	atomic.AddInt64(&cc.Cap, -n6)
+	cc.Cap.Add(-n6)
 
 	nv := cap - n6
 
@@ -114,6 +118,6 @@ func (cc *CounterConn) Write(b []byte) (int, error) {
 		return n, io.EOF
 	}
 	// we use the zero value as a way to tell that there is no cap set
-	atomic.AddInt64(&cc.Cap, -1)
+	cc.Cap.Add(-1)
 	return n, err
 }
